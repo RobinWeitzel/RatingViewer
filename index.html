@@ -86,7 +86,6 @@
                 json.details.forEach(d => {
                     $('#container').append(`
                     <div class="detail">
-                        <button class="remove">remove</button>
                         <h4>${d.title.replace(/\n/g,"<br />")}</h4>
                         <div class="rating" data-rating="${d.rating}"></div>
                         <p>${d.text.replace(/\n/g,"<br />")}</p>
