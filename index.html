@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="css/star-rating-svg.css">
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: 100%;
+            grid-template-areas: "content";
+        }
+
+        @media (min-width: 750px) {
+            body {
+                grid-template-columns: 25% 50% 25%;
+                grid-template-areas: ". content .";
+            }
+        }
+
+        #container {
+            grid-area: content;
+            display: grid;
+            justify-items: center;
+        }
+
+        h3 {
+            margin-top: 0px;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            margin-top: 0px;
+            margin-bottom: 5px;
+        }
+
+        #container>.detail,
+        #container>h3 {
+            justify-self: left;
+        }
+
+        .detail {
+            width: 100%;
+        }
+
+        .detail:hover {
+            border-color: gray;
+            border-width: 1px;
+            border-style: dashed;
+        }
+
+        input,
+        textarea {
+            display: none;
+        }
+
+        .remove {
+            float: right;
+            display: none;
+        }
+
+        .detail:hover .remove {
+            display: block;
+        }
+
+        p:empty::after, h1:empty::after, h3:empty::after {
+            content: 'Add text here';
+            color: lightgrey;
+        }
+    </style>
+
+    <title>Rating Builder</title>
+</head>
+
+<body>
+    <div id="container">
+        <h1>Title</h1>
+        <div class="rating"></div>
+        <p></p>
+        <h3>Detailbewertung:</h3>
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="js/jquery.star-rating-svg.min.js"></script>
+    <script type="text/javascript" src="js/json-url.js"></script>
+    <script>
+        const lib = JsonUrl('lzma'); // JsonUrl is added to the window object
+
+        const load = () => {
+            const arr = window.location.href.split('?data=');
+
+            if (arr.length < 2) {
+                $(".rating").starRating({
+                    starSize: 25,
+                    hoverColor: '#FFED85',
+                    activeColor: '#FFD700',
+                    ratedColor: '#FFD700',
+                    readOnly: true,
+                });
+                alert('No rating found! Is the url correct?');
+                return;
+            }
+
+            lib.decompress(arr[1]).then(json => {
+                $('#container h1').html(json.title);
+                $('#container .rating').data('rating', json.rating);
+                $('#container p').html(json.text);
+
+                json.details.forEach(d => {
+                    $('#container').append(`
+                    <div class="detail">
+                        <button class="remove">remove</button>
+                        <h4>${d.title.replace(/\n/g,"<br />")}</h4>
+                        <div class="rating" data-rating="${d.rating}"></div>
+                        <p>${d.text.replace(/\n/g,"<br />")}</p>
+                    </div>
+                `);
+                });
+
+                $(".rating").starRating({
+                    starSize: 25,
+                    hoverColor: '#FFED85',
+                    activeColor: '#FFD700',
+                    ratedColor: '#FFD700',
+                    readOnly: true,
+                });
+
+                $('.rating').each(function () {
+                    const rating = $(this).data('rating');
+
+                    $(this).starRating('setRating', rating);
+                });
+            });
+        }
+
+        $(document).ready(function () {
+            load();
+        });
+    </script>
+</body>
+
+</html>
