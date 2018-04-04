@@ -79,9 +79,9 @@
             }
 
             lib.decompress(arr[1]).then(json => {
-                $('#container h1').html(json.title);
+                $('#container h1').html(json.title.replace(/\n/g,"<br />"));
                 $('#container .rating').data('rating', json.rating);
-                $('#container p').html(json.text);
+                $('#container p').html(json.text.replace(/\n/g,"<br />"));
 
                 json.details.forEach(d => {
                     $('#container').append(`
