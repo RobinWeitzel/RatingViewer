@@ -46,7 +46,7 @@
         }
     </style>
 
-    <title>Rating Builder</title>
+    <title>Rating Viewer</title>
 </head>
 
 <body>
@@ -79,6 +79,7 @@
             }
 
             lib.decompress(arr[1]).then(json => {
+                document.title = json.title;
                 $('#container h1').html(json.title.replace(/\n/g,"<br />"));
                 $('#container .rating').data('rating', json.rating);
                 $('#container p').html(json.text.replace(/\n/g,"<br />"));
