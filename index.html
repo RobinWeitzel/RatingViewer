@@ -151,7 +151,7 @@
             lib.decompress(arr[1]).then(json => {
                 document.title = json.title;
                 $('#title-container h1').html(json.title.replace(/\n/g, "<br />"));
-                $('#title-container .rating').data('rating', json.rating);
+                $('#rating-container .rating').data('rating', json.rating);
                 $('#rating-text').html(json.rating);
                 $('#title-container p').html(json.text.replace(/\n/g, "<br />"));
 
