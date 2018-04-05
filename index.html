@@ -85,7 +85,7 @@
             display: grid;
             grid-template-columns: 70% 30%;
             grid-template-rows: auto auto;
-            grid-template-areas: "rating ." "text text";
+            grid-template-areas: "rating .""text text";
         }
 
         #rating-text {
@@ -158,9 +158,16 @@
                 json.details.forEach(d => {
                     $('#details-container').append(`
                     <div class="detail">
-                        <h4>${d.title.replace(/\n/g, "<br />")}</h4>
-                        <div class="rating" data-rating="${d.rating}"></div>
-                        <p>${d.text.replace(/\n/g, "<br />")}</p>
+                        <div class="title-container">
+                            <h4>${d.title.replace(/\n/g, "<br />")}</h4>
+                        </div>
+                        <div class="text-container">
+                            <button class="remove">remove</button>
+                            <div class="rating" data-rating="${d.rating}"></div>
+                            <div class="deep-text-container">
+                                <p>${d.text.replace(/\n/g, "<br />")}</p>
+                            </div>
+                        </div>
                     </div>
                 `);
                 });
