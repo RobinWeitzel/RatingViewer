@@ -6,11 +6,15 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/star-rating-svg.css">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed" rel="stylesheet">
+
     <style>
         body {
             display: grid;
             grid-template-columns: 100%;
             grid-template-areas: "content";
+            background: #00CED1;
+            font-family: 'Barlow Semi Condensed', sans-serif;
         }
 
         @media (min-width: 750px) {
@@ -21,9 +25,37 @@
         }
 
         #container {
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 50px;
+            box-shadow: 0px 2px 7px 1px #aa9191;
             grid-area: content;
             display: grid;
-            justify-items: center;
+            grid-template-columns: 30% 70%;
+            grid-template-rows: auto auto;
+            grid-template-areas: "rating title" "details details";
+            align-items: center;
+        }
+
+        #title-container {
+            grid-area: title;
+        }
+
+        #rating-container {
+            grid-area: rating;
+            text-align: center;
+        }
+
+        #details-container {
+            grid-area: details;
+        }
+
+        #controls {
+            background: #FFFFFF;
+            padding: 10px;
+            margin-top: 50px;
+            box-shadow: 0px 2px 7px 1px #aa9191;
+            grid-area: controls;
         }
 
         h3 {
@@ -36,13 +68,43 @@
             margin-bottom: 5px;
         }
 
-        #container>.detail,
-        #container>h3 {
-            justify-self: left;
+        .detail {
+            display: grid;
+            grid-template-columns: 30% 70%;
+            grid-template-areas: "title text";
+            width: 100%;
         }
 
-        .detail {
-            width: 100%;
+        .title-container {
+            grid-area: title;
+            align-self: center
+        }
+
+        .text-container {
+            grid-area: text;
+            display: grid;
+            grid-template-columns: 70% 30%;
+            grid-template-rows: auto auto;
+            grid-template-areas: "rating ." "text text";
+        }
+
+        #rating-text {
+            font-size: 50px;
+        }
+
+        .rating {
+            grid-area: rating;
+        }
+
+        .deep-text-container {
+            grid-area: text;
+        }
+
+        h1,
+        #rating-text,
+        h3,
+        h4 {
+            font-weight: bold;
         }
     </style>
 
@@ -51,10 +113,18 @@
 
 <body>
     <div id="container">
-        <h1>Title</h1>
-        <div class="rating"></div>
-        <p></p>
-        <h3>Detailbewertung:</h3>
+        <div id="title-container">
+            <h1>Title</h1>
+            <p></p>
+        </div>
+        <div id="rating-container">
+            <h2 id="rating-text">0</h2>
+            <div class="rating"></div>
+            <p>Average Rating</p>
+        </div>
+        <div id="details-container">
+            <h3>Detailbewertung:</h3>
+        </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
@@ -80,16 +150,17 @@
 
             lib.decompress(arr[1]).then(json => {
                 document.title = json.title;
-                $('#container h1').html(json.title.replace(/\n/g,"<br />"));
-                $('#container .rating').data('rating', json.rating);
-                $('#container p').html(json.text.replace(/\n/g,"<br />"));
+                $('#title-container h1').html(json.title.replace(/\n/g, "<br />"));
+                $('#title-container .rating').data('rating', json.rating);
+                $('#rating-text').html(json.rating);
+                $('#title-container p').html(json.text.replace(/\n/g, "<br />"));
 
                 json.details.forEach(d => {
-                    $('#container').append(`
+                    $('#details-container').append(`
                     <div class="detail">
-                        <h4>${d.title.replace(/\n/g,"<br />")}</h4>
+                        <h4>${d.title.replace(/\n/g, "<br />")}</h4>
                         <div class="rating" data-rating="${d.rating}"></div>
-                        <p>${d.text.replace(/\n/g,"<br />")}</p>
+                        <p>${d.text.replace(/\n/g, "<br />")}</p>
                     </div>
                 `);
                 });
@@ -104,7 +175,6 @@
 
                 $('.rating').each(function () {
                     const rating = $(this).data('rating');
-
                     $(this).starRating('setRating', rating);
                 });
             });
