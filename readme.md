@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  RatingsBuilder
+  RatingsViewer
   <br>
 </h1>
 
